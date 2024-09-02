@@ -1,12 +1,3 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Resources:
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: my-codedeploy-artifacts-bucket
-      VersioningConfiguration:
-        Status: Enabled
-
   CodeDeployApplication:
     Type: AWS::CodeDeploy::Application
     Properties:
@@ -34,43 +25,7 @@ Resources:
                   - s3:List*
                 Resource: '*'
 
-  EC2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.micro
-      KeyName: your-key-pair
-      SecurityGroups:
-        - default
-      ImageId: ami-0c55b159cbfafe1f0
-      IamInstanceProfile: !Ref EC2InstanceProfile
-
-  EC2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles:
-        - Ref: EC2Role
-
-  EC2Role:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      Path: "/"
-      Policies:
-        - PolicyName: EC2Policy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:*
-                Resource: '*'
-
+ 
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
